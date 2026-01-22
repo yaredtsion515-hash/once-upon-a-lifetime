@@ -2,67 +2,157 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Just Us</title>
+  <title>Once Upon a Time ✨</title>
 
   <style>
     body {
       margin: 0;
       height: 100vh;
-      background: #fff5f8;
-      font-family: Arial, sans-serif;
+      font-family: 'Georgia', serif;
+      background: linear-gradient(135deg, #0f0f0f, #2b2b2b);
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
       overflow: hidden;
-      text-align: center;
     }
 
-    #question {
-      position: absolute;
-      top: 40%;
-      width: 100%;
+    .page {
+      max-width: 420px;
+      text-align: center;
+      padding: 30px;
+      animation: fadeIn 1.5s ease;
+      position: relative;
+      z-index: 2;
+    }
+
+    p {
+      line-height: 1.8;
+      font-size: 17px;
+    }
+
+    h1 {
+      font-weight: normal;
+      margin-bottom: 20px;
     }
 
     button {
-      padding: 14px 28px;
-      font-size: 20px;
+      margin-top: 30px;
+      padding: 12px 26px;
       border: none;
-      border-radius: 30px;
+      border-radius: 25px;
+      font-size: 16px;
       cursor: pointer;
-      background: pink;
     }
 
+    .primary {
+      background: #ff4d6d;
+      color: white;
+    }
+
+    .secondary {
+      background: #555;
+      color: white;
+      position: absolute;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .heart {
+      font-size: 42px;
+      animation: float 1.6s ease-in-out infinite;
+    }
+
+    /* Falling words */
     .petal {
       position: absolute;
-      top: -50px;
-      font-size: 22px;
+      top: -40px;
+      font-size: 16px;
+      opacity: 0.8;
       animation: fall linear forwards;
-      opacity: 0.85;
+      pointer-events: none;
+      z-index: 1;
     }
 
     @keyframes fall {
+      from {
+        transform: translateY(0);
+        opacity: 1;
+      }
       to {
-        transform: translateY(100vh);
+        transform: translateY(110vh);
         opacity: 0;
       }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes float {
+      0% { transform: translateY(0); }
+      50% { transform: translateY(-20px); }
+      100% { transform: translateY(0); }
     }
   </style>
 </head>
 
 <body>
 
-  <div id="question">
-    <h1>Will you choose me?</h1>
-    <button onclick="reveal()">True 💗</button>
+  <!-- Page 1 -->
+  <div class="page" id="intro">
+    <p>
+      <strong>Once upon a time,</strong> we laughed without trying, talked without forcing,<br>
+      and created our own safe space around each other.<br><br>
+      The chapter may have closed,<br>
+      but the story never left my heart.
+    </p>
+    <button class="primary" onclick="goToQuestion()">Continue ✨</button>
   </div>
 
-  <!-- Music -->
-  <audio id="music" src="love.mp3"></audio>
+  <!-- Page 2 -->
+  <div class="page hidden" id="question">
+    <h1>One question</h1>
+    <p>
+      Every fairytale has a happy ending.<br>
+      <strong>True or False?</strong>
+    </p>
+    <button class="primary" id="trueBtn">True 🤍</button>
+    <button class="secondary" id="falseBtn">False</button>
+  </div>
+
+  <!-- Page 3 -->
+  <div class="page hidden" id="yesMoment">
+    <h1>Then maybe…</h1>
+    <div class="heart">❤️✨❤️</div>
+    <p>
+      This fairytale isn’t over yet.<br>
+      Maybe it’s just finding its way back.
+    </p>
+  </div>
 
   <script>
-    function reveal() {
-      document.getElementById("question").style.display = "none";
+    function goToQuestion() {
+      document.getElementById("intro").classList.add("hidden");
+      document.getElementById("question").classList.remove("hidden");
+    }
 
-      const music = document.getElementById("music");
-      music.play();
+    const falseBtn = document.getElementById("falseBtn");
+    falseBtn.addEventListener("mouseover", () => {
+      falseBtn.style.left = Math.random() * (window.innerWidth - 120) + "px";
+      falseBtn.style.top = Math.random() * (window.innerHeight - 60) + "px";
+    });
 
+    document.getElementById("trueBtn").addEventListener("click", () => {
+      document.getElementById("question").classList.add("hidden");
+      document.getElementById("yesMoment").classList.remove("hidden");
+      startPetals();
+    });
+
+    function startPetals() {
       const words = [
         "I missed you",
         "It was always you",
@@ -72,16 +162,16 @@
       ];
 
       setInterval(() => {
-        const word = document.createElement("div");
-        word.className = "petal";
-        word.innerText = words[Math.floor(Math.random() * words.length)];
-        word.style.left = Math.random() * 100 + "vw";
-        word.style.animationDuration = (3 + Math.random() * 3) + "s";
+        const petal = document.createElement("div");
+        petal.className = "petal";
+        petal.innerText = words[Math.floor(Math.random() * words.length)];
+        petal.style.left = Math.random() * 100 + "vw";
+        petal.style.animationDuration = (4 + Math.random() * 4) + "s";
 
-        document.body.appendChild(word);
+        document.body.appendChild(petal);
 
-        setTimeout(() => word.remove(), 6000);
-      }, 400);
+        setTimeout(() => petal.remove(), 9000);
+      }, 500);
     }
   </script>
 
