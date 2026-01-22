@@ -1,222 +1,89 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Once Upon a Time ✨</title>
+  <meta charset="UTF-8">
+  <title>Just Us</title>
+
   <style>
-    :root{
-      --bg1: #0f0f0f;
-      --bg2: #2b2b2b;
-      --accent: #ff4d6d;
-      --muted: #555;
-      --page-max: 420px;
-    }
-
-    html,body{
-      height:100%;
-      margin:0;
-    }
-
     body {
+      margin: 0;
       height: 100vh;
-      font-family: 'Georgia', serif;
-      background: linear-gradient(135deg, var(--bg1), var(--bg2));
-      color: white;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      background: #fff5f8;
+      font-family: Arial, sans-serif;
       overflow: hidden;
-      -webkit-font-smoothing:antialiased;
-      -moz-osx-font-smoothing:grayscale;
-    }
-
-    .page {
-      max-width: var(--page-max);
-      width: 90%;
       text-align: center;
-      padding: 30px;
-      animation: fadeIn 1.5s ease;
-      position: relative;
-      box-sizing: border-box;
     }
 
-    p {
-      line-height: 1.8;
-      font-size: 17px;
-      margin: 0 0 1rem;
-    }
-
-    h1 {
-      font-weight: normal;
-      margin: 0 0 18px;
-    }
-
-    .actions {
-      display: flex;
-      justify-content: center;
-      gap: 12px;
-      margin-top: 30px;
-      min-height: 56px;
-      position: relative;
+    #question {
+      position: absolute;
+      top: 40%;
+      width: 100%;
     }
 
     button {
-      padding: 12px 26px;
+      padding: 14px 28px;
+      font-size: 20px;
       border: none;
-      border-radius: 25px;
-      font-size: 16px;
+      border-radius: 30px;
       cursor: pointer;
-      background: transparent;
-      color: white;
-      transition: transform .12s ease;
+      background: pink;
     }
 
-    button:active { transform: scale(.98); }
-    button:focus { outline: 3px solid rgba(255,255,255,.12); outline-offset:4px; }
-
-    .primary {
-      background: var(--accent);
-      color: white;
-    }
-
-    .secondary {
-      background: var(--muted);
-      color: white;
+    .petal {
       position: absolute;
-      left: 0;
-      top: 0;
-      transform: none;
-      transition: left 180ms ease, top 180ms ease;
+      top: -50px;
+      font-size: 22px;
+      animation: fall linear forwards;
+      opacity: 0.85;
     }
 
-    .hidden {
-      display: none;
-    }
-
-    .heart {
-      font-size: 42px;
-      animation: float 1.6s ease-in-out infinite;
-      margin: 8px 0;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    @keyframes float {
-      0% { transform: translateY(0); }
-      50% { transform: translateY(-20px); }
-      100% { transform: translateY(0); }
-    }
-
-    @media (max-width:420px){
-      .heart { font-size: 36px; }
-      p { font-size: 15px; }
-      button { font-size: 15px; padding:10px 20px; }
+    @keyframes fall {
+      to {
+        transform: translateY(100vh);
+        opacity: 0;
+      }
     }
   </style>
 </head>
+
 <body>
 
-  <main class="page" id="intro" aria-labelledby="intro-heading">
-    <p id="intro-heading">
-      <strong>Once upon a time,</strong> we laughed without trying, talked without forcing,<br>
-      and created our own safe space around each other.<br><br>
-      The chapter may have closed,<br>
-      but the story never left my heart.
-    </p>
-    <div class="actions" aria-hidden="false">
-      <button type="button" class="primary" id="continueBtn">Continue ✨</button>
-    </div>
-  </main>
+  <div id="question">
+    <h1>Will you choose me?</h1>
+    <button onclick="reveal()">True 💗</button>
+  </div>
 
-  <main class="page hidden" id="question" aria-labelledby="question-heading" role="region">
-    <h1 id="question-heading">One question</h1>
-    <p>
-      Every fairytale has a happy ending.<br>
-      <strong>True or False?</strong>
-    </p>
-
-    <div class="actions" id="actionArea" aria-live="polite">
-      <button type="button" class="primary" id="trueBtn">True 🤍</button>
-      <button type="button" class="secondary" id="falseBtn" aria-label="Choose false (elusive)">False</button>
-    </div>
-  </main>
-
-  <main class="page hidden" id="yesMoment" aria-labelledby="yes-heading" role="region">
-    <h1 id="yes-heading">Then maybe…</h1>
-    <div class="heart" aria-hidden="true">❤️✨❤️</div>
-    <p>
-      This fairytale isn’t over yet.<br>
-      Maybe it’s just finding its way back.
-    </p>
-  </main>
+  <!-- Music -->
+  <audio id="music" src="love.mp3"></audio>
 
   <script>
-    (function () {
-      const intro = document.getElementById('intro');
-      const question = document.getElementById('question');
-      const yesMoment = document.getElementById('yesMoment');
-      const continueBtn = document.getElementById('continueBtn');
-      const trueBtn = document.getElementById('trueBtn');
-      const falseBtn = document.getElementById('falseBtn');
-      const actionArea = document.getElementById('actionArea');
+    function reveal() {
+      document.getElementById("question").style.display = "none";
 
-      function show(el) {
-        [intro, question, yesMoment].forEach(e => e.classList.add('hidden'));
-        el.classList.remove('hidden');
-      }
+      const music = document.getElementById("music");
+      music.play();
 
-      continueBtn.addEventListener('click', () => {
-        show(question);
-        trueBtn.focus();
-      });
+      const words = [
+        "I missed you",
+        "It was always you",
+        "Some things wait",
+        "We found our way back",
+        "I choose you"
+      ];
 
-      trueBtn.addEventListener('click', () => {
-        show(yesMoment);
-        const heading = yesMoment.querySelector('h1');
-        if (heading) heading.focus?.();
-      });
+      setInterval(() => {
+        const word = document.createElement("div");
+        word.className = "petal";
+        word.innerText = words[Math.floor(Math.random() * words.length)];
+        word.style.left = Math.random() * 100 + "vw";
+        word.style.animationDuration = (3 + Math.random() * 3) + "s";
 
-      function moveFalseButtonRandomly() {
-        const containerRect = actionArea.getBoundingClientRect();
-        const btnRect = falseBtn.getBoundingClientRect();
+        document.body.appendChild(word);
 
-        const maxLeft = Math.max(0, containerRect.width - btnRect.width);
-        const maxTop = Math.max(0, containerRect.height - btnRect.height);
-
-        const padding = 4;
-        const left = padding + Math.random() * Math.max(0, maxLeft - padding * 2);
-        const top = padding + Math.random() * Math.max(0, maxTop - padding * 2);
-
-        falseBtn.style.left = left + 'px';
-        falseBtn.style.top = top + 'px';
-      }
-
-      falseBtn.addEventListener('mouseover', moveFalseButtonRandomly);
-      falseBtn.addEventListener('focus', moveFalseButtonRandomly);
-      falseBtn.addEventListener('touchstart', (e) => {
-        e.preventDefault();
-        moveFalseButtonRandomly();
-      }, { passive: false });
-
-      falseBtn.addEventListener('click', () => {
-        console.info('False chosen');
-      });
-
-      function initPositions() {
-        const btnRect = trueBtn.getBoundingClientRect();
-        const containerRect = actionArea.getBoundingClientRect();
-        const initialLeft = Math.min(containerRect.width - falseBtn.offsetWidth, btnRect.right - containerRect.left + 12);
-        falseBtn.style.left = (initialLeft >= 0 ? initialLeft : 0) + 'px';
-        falseBtn.style.top = '0px';
-      }
-
-      window.addEventListener('load', initPositions);
-      window.addEventListener('resize', initPositions);
-    })();
+        setTimeout(() => word.remove(), 6000);
+      }, 400);
+    }
   </script>
+
 </body>
 </html>
